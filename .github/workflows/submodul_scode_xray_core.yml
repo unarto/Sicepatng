@@ -1,0 +1,36 @@
+name: Pasang Submodule Otomatis
+
+on:
+  workflow_dispatch: # Biar muncul tombol klik manual di browser
+
+permissions:
+  contents: write # Wajib biar GitHub bisa nge-push balik kodenya
+
+jobs:
+  inject-submodule:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ambil Source Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set Identity Bot
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Eksekusi Pasang Submodule
+        run: |
+          # Bersihin sisa-sisa lama kalau ada biar gak bentrok
+          git rm -f Xraycorev26 || true
+          rm -rf .git/modules/Xraycorev26 || true
+          
+          # Tambah submodule Xraycorev26.1.3 lu langsung ke folder Xraycorev26
+          git submodule add https://github.com/unarto/Xraycorev26.1.3 Xraycorev26
+          
+          # Push balik perubahan ke repo utama lu
+          git add .
+          git commit -m "🤖 Bot: Sukses pasang submodule Xraycorev26 secara otomatis"
+          git push origin main

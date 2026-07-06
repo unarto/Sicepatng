@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">v2rayNG Alien</string>
+    <string name="title_language">Bahasa (preketek)</string>
+    <string name="title_pref_ui_mode_night">Prekotok Mode</string>
+    <string name="title_pref_theme">Thema Alien</string>
+    <string name="menu_item_search">Cari (prokotok)</string>
+    <string name="title_pref_backup_restore">Backup (preketek preketek prokotok prokotok wkwk)</string>
+</resources>

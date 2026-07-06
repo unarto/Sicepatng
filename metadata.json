@@ -1,0 +1,8 @@
+{
+  "name": "Remix Remix: Remix: Remix: Remix: Remix: Remix: Sicepat",
+  "description": "A modern Xray client featuring high-performance protocol backends and secure SOCKS5 tunneling for seamless, real-time network routing.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

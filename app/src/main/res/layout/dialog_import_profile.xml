@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/btn_qr_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="QR code\nScan QR code to obtain profile"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_scan_24dp"
+        android:gravity="center_vertical"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <TextView
+        android:id="@+id/btn_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="File\nDirectly upload profile"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_file_24dp"
+        android:gravity="center_vertical"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <TextView
+        android:id="@+id/btn_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="URL\nObtain profile through URL"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_cloud_download_24dp"
+        android:gravity="center_vertical"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+</LinearLayout>

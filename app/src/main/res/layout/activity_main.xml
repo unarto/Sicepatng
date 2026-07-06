@@ -1,0 +1,1008 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/main_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                        
+
+                <FrameLayout
+                    android:id="@+id/layout_proxies"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="72dp">
+                    
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.progressindicator.LinearProgressIndicator
+                            android:id="@+id/progress_bar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:indeterminate="true"
+                            android:visibility="invisible"
+                            app:indicatorColor="@color/color_fab_active" />
+
+                        <!-- Proxy Header Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="12dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Proxy"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                android:textColor="?android:attr/textColorPrimary" />
+                            
+                            <ImageView
+                                android:id="@+id/btn_edit_proxy"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_marginStart="12dp"
+                                android:src="@drawable/ic_edit_24dp"
+                                app:tint="?android:attr/textColorPrimary"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:clickable="true"
+                                android:focusable="true"/>
+
+                            <Space
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/btn_search_proxy"
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_marginEnd="16dp"
+                                android:src="@drawable/ic_outline_filter_alt_24"
+                                app:tint="?android:attr/textColorPrimary"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:clickable="true"
+                                android:focusable="true"/>
+                                
+                            <ImageView
+                                android:id="@+id/btn_settings_proxy"
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_marginEnd="16dp"
+                                android:src="@drawable/ic_settings_24dp"
+                                app:tint="?android:attr/textColorPrimary"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:clickable="true"
+                                android:focusable="true"/>
+
+                            <ImageView
+                                android:id="@+id/btn_add_proxy"
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_marginEnd="16dp"
+                                android:src="@drawable/ic_add_24dp"
+                                app:tint="?android:attr/textColorPrimary"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:clickable="true"
+                                android:focusable="true"/>
+                                
+                            <ImageView
+                                android:id="@+id/btn_more_proxy"
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:src="@drawable/ic_more_vert_24dp"
+                                app:tint="?android:attr/textColorPrimary"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:clickable="true"
+                                android:focusable="true"/>
+                        </LinearLayout>
+
+                        <com.google.android.material.tabs.TabLayout
+                            android:id="@+id/tab_group"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:tabIndicatorFullWidth="false"
+                            app:tabMode="scrollable"
+                            app:tabTextAppearance="@style/TabLayoutTextStyle" />
+
+                        <androidx.viewpager2.widget.ViewPager2
+                            android:id="@+id/view_pager"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:nextFocusRight="@+id/fab"
+                            android:scrollbars="vertical"
+                            android:layout_weight="1" />
+
+                        <LinearLayout
+                            android:id="@+id/layout_test"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/view_height_dp64"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:nextFocusLeft="@+id/view_pager"
+                            android:nextFocusRight="@+id/fab"
+                            android:orientation="vertical">
+
+                            <View
+                                android:layout_width="wrap_content"
+                                android:layout_height="1dp"
+                                android:background="@color/divider_color_light" />
+
+                            <TextView
+                                android:id="@+id/tv_test_state"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="start|center"
+                                android:maxLines="2"
+                                android:minLines="1"
+                                android:paddingStart="@dimen/padding_spacing_dp16"
+                                android:text="@string/connection_test_pending"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </FrameLayout>
+                
+                        
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginEnd="@dimen/padding_spacing_dp16"
+                    android:layout_marginBottom="88dp">
+
+                    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                        android:id="@+id/fab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|end"
+                        android:layout_marginBottom="16dp"
+                        android:clickable="true"
+                        android:contentDescription="@string/tasker_start_service"
+                        android:focusable="true"
+                        android:nextFocusLeft="@+id/layout_test"
+                        app:icon="@drawable/ic_play_24dp"
+                        app:iconTint="@color/colorWhite"
+                        android:textColor="@color/colorWhite"
+                        app:layout_anchorGravity="bottom|right|end" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/fab_ping"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|end"
+                        android:layout_marginBottom="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_ping_24dp"
+                        app:tint="#000000"
+                        app:backgroundTint="#4fc3f7" />
+
+                </FrameLayout>
+
+                <ScrollView
+                    android:id="@+id/layout_dashboard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="72dp"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+                        
+                        <!-- Dashboard Cards (Video Layout) -->
+                        
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:background="@drawable/bg_dashboard_card"
+                            android:layout_marginBottom="16dp">
+                            <com.sicepat.xrayapp.ui.SpeedChartView
+                                android:id="@+id/speed_chart_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="top"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="20dp"
+                                android:paddingTop="16dp">
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/ic_3d_speed"
+                                    app:iconTint="@color/colorWhite"
+                        android:textColor="@color/colorWhite"
+                                    android:layout_marginEnd="8dp" />
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:text="Network speed"
+                                    android:textColor="@color/dashboard_card_text"
+                                    android:textSize="16sp" />
+                                <TextView
+                                    android:id="@+id/tv_network_speed"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="↑ 0 B/s   ↓ 0 B/s"
+                                    android:textColor="@color/dashboard_card_text"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+                        </FrameLayout>
+                        
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:baselineAligned="false">
+                            
+                            <!-- Left Column -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                
+                                <!-- Traffic Usage -->
+                        
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="140dp"
+                                    android:background="@drawable/bg_dashboard_card"
+                                    android:layout_marginEnd="8dp"
+                                    android:layout_marginBottom="16dp">
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="vertical"
+                                        android:padding="12dp">
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="center_vertical">
+                                            <ImageView
+                                                android:layout_width="20dp"
+                                                android:layout_height="20dp"
+                                                android:src="@drawable/ic_3d_traffic"
+                                                app:iconTint="@color/colorWhite"
+                        android:textColor="@color/colorWhite"
+                                                android:layout_marginEnd="8dp" />
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Traffic usage"
+                                                android:textColor="@color/dashboard_card_text"
+                                                android:textSize="14sp" />
+                                        </LinearLayout>
+                                        <com.sicepat.xrayapp.ui.TrafficUsageRingView
+                                            android:id="@+id/ring_traffic_usage"
+                                            android:layout_width="56dp"
+                                            android:layout_height="56dp"
+                                            android:layout_gravity="center"
+                                            android:layout_marginTop="8dp" />
+                                        <TextView
+                                            android:id="@+id/tv_traffic_usage"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="8dp"
+                                            android:text="↑ 0 B\n↓ 0 B"
+                                            android:textColor="@color/dashboard_card_text"
+                                            android:textSize="12sp" />
+                                    </LinearLayout>
+                                </FrameLayout>
+                                
+                                <!-- Network delay -->
+                        
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="80dp"
+                                    android:background="@drawable/bg_dashboard_card"
+                                    android:layout_marginEnd="8dp"
+                                    android:layout_marginBottom="16dp">
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="vertical"
+                                        android:padding="12dp">
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="center_vertical">
+                                            <ImageView
+                                                android:layout_width="20dp"
+                                                android:layout_height="20dp"
+                                                android:src="@drawable/ic_3d_network"
+                                                app:iconTint="@color/colorWhite"
+                        android:textColor="@color/colorWhite"
+                                                android:layout_marginEnd="8dp" />
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Network ..."
+                                                android:textColor="@color/dashboard_card_text"
+                                                android:textSize="14sp" />
+                                        </LinearLayout>
+                                        <TextView
+                                            android:id="@+id/tv_network_delay"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="8dp"
+                                            android:text="timeout"
+                                            android:textColor="#F44336"
+                                            android:textSize="14sp" />
+                                    </LinearLayout>
+                                </FrameLayout>
+                                
+                                <!-- VPN Mode -->
+                        
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="80dp"
+                                    android:background="@drawable/bg_dashboard_card"
+                                    android:layout_marginEnd="8dp"
+                                    android:layout_marginBottom="16dp">
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:padding="12dp">
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="vertical">
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:gravity="center_vertical">
+                                                <ImageView
+                                                    android:layout_width="20dp"
+                                                    android:layout_height="20dp"
+                                                    android:src="@drawable/ic_3d_vpn"
+                                                    app:iconTint="@color/colorWhite"
+                        android:textColor="@color/colorWhite"
+                                                    android:layout_marginEnd="8dp" />
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="VPN"
+                                                    android:textColor="@color/dashboard_card_text"
+                                                    android:textSize="14sp" />
+                                            </LinearLayout>
+                                            <TextView
+                                                android:id="@+id/tv_vpn_mode"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Options"
+                                                android:layout_marginTop="4dp"
+                                                android:textColor="@color/dashboard_card_text"
+                                                android:alpha="0.7"
+                                                android:textSize="12sp" />
+                                        </LinearLayout>
+                                        <com.google.android.material.switchmaterial.SwitchMaterial
+                                            android:id="@+id/switch_vpn_mode"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content" />
+                                    </LinearLayout>
+                                </FrameLayout>
+                                
+                            </LinearLayout>
+                            
+                            <!-- Right Column -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                
+                                <!-- Outbound Mode -->
+                        
+
+                                <FrameLayout
+                                    android:id="@+id/btn_routing_mode"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="140dp"
+                                    android:background="@drawable/bg_dashboard_card"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginBottom="16dp"
+                                    android:clickable="true"
+                                    android:focusable="true">
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="vertical"
+                                        android:padding="12dp">
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="center_vertical">
+                                            <ImageView
+                                                android:layout_width="20dp"
+                                                android:layout_height="20dp"
+                                                android:src="@drawable/ic_3d_routing"
+                                                app:iconTint="@color/colorWhite"
+                        android:textColor="@color/colorWhite"
+                                                android:layout_marginEnd="8dp" />
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Outbound m..."
+                                                android:textColor="@color/dashboard_card_text"
+                                                android:textSize="14sp" />
+                                        </LinearLayout>
+                                        <RadioGroup
+                                            android:id="@+id/rg_outbound_mode"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="4dp">
+                                            <RadioButton
+                                                android:id="@+id/rb_rule"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Rule"
+                                                android:textColor="@color/dashboard_card_text"
+                                                android:buttonTint="#4fc3f7"
+                                                android:textSize="12sp" />
+                                            <RadioButton
+                                                android:id="@+id/rb_global"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Global"
+                                                android:textColor="@color/dashboard_card_text"
+                                                android:buttonTint="#4fc3f7"
+                                                android:textSize="12sp" />
+                                            <RadioButton
+                                                android:id="@+id/rb_direct"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Direct"
+                                                android:textColor="@color/dashboard_card_text"
+                                                android:buttonTint="#4fc3f7"
+                                                android:textSize="12sp" />
+                                        </RadioGroup>
+                                    </LinearLayout>
+                                </FrameLayout>
+                                
+                                <!-- Intranet IP -->
+                        
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="80dp"
+                                    android:background="@drawable/bg_dashboard_card"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginBottom="16dp">
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="vertical"
+                                        android:padding="12dp">
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="center_vertical">
+                                            <ImageView
+                                                android:layout_width="20dp"
+                                                android:layout_height="20dp"
+                                                android:src="@drawable/ic_3d_provider"
+                                                app:iconTint="@color/colorWhite"
+                        android:textColor="@color/colorWhite"
+                                                android:layout_marginEnd="8dp" />
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Intranet IP"
+                                                android:textColor="@color/dashboard_card_text"
+                                                android:textSize="14sp" />
+                                        </LinearLayout>
+                                        <TextView
+                                            android:id="@+id/tv_provider_ip"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="8dp"
+                                            android:text="-"
+                                            android:textColor="@color/dashboard_card_text"
+                                            android:textSize="13sp" />
+                                    </LinearLayout>
+                                </FrameLayout>
+                                
+                                <!-- Memory Info -->
+                        
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="80dp"
+                                    android:background="@drawable/bg_dashboard_card"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginBottom="16dp">
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="vertical"
+                                        android:padding="12dp">
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="center_vertical">
+                                            <ImageView
+                                                android:layout_width="20dp"
+                                                android:layout_height="20dp"
+                                                android:src="@drawable/ic_3d_memory"
+                                                app:iconTint="@color/colorWhite"
+                        android:textColor="@color/colorWhite"
+                                                android:layout_marginEnd="8dp" />
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="App RAM Usage"
+                                                android:textColor="@color/dashboard_card_text"
+                                                android:textSize="14sp" />
+                                        </LinearLayout>
+                                        <TextView
+                                            android:id="@+id/tv_memory_info"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="8dp"
+                                            android:text="-"
+                                            android:textColor="@color/dashboard_card_text"
+                                            android:textSize="13sp" />
+                                    </LinearLayout>
+                                </FrameLayout>
+                                
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </ScrollView>
+
+                <ScrollView
+                    android:id="@+id/layout_tools"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="72dp"
+                    android:visibility="gone">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+                                         <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Networking"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <FrameLayout
+                            android:id="@+id/btn_hotshare"
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:background="@drawable/bg_dashboard_card"
+                            android:layout_marginBottom="8dp"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="16dp">
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_share_24dp"
+                                    app:tint="@color/colorWhite" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:text="Hotshare"
+                                    android:textColor="@color/dashboard_card_text"
+                                    android:textSize="16sp" />
+                            </LinearLayout>
+                        </FrameLayout>
+                        <FrameLayout
+                            android:id="@+id/btn_hotspot_root"
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:background="@drawable/bg_dashboard_card"
+                            android:layout_marginBottom="16dp"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="16dp">
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_settings_24dp"
+                                    app:tint="@color/colorWhite" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:text="Hotspot Root"
+                                    android:textColor="?android:attr/textColorPrimary"
+                                    android:textSize="16sp" />
+                            </LinearLayout>
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="VPN &amp; Proxy"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <FrameLayout
+                            android:id="@+id/btn_per_app_proxy"
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:background="@drawable/bg_dashboard_card"
+                            android:layout_marginBottom="8dp"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="16dp">
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_per_apps_24dp"
+                                    app:tint="@color/colorWhite" />
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Per-App Proxy"
+                                        android:textColor="?android:attr/textColorPrimary"
+                                        android:textSize="16sp" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Limit which apps use VPN"
+                                        android:textColor="@color/dashboard_card_text"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </FrameLayout>
+                        
+                        <FrameLayout
+                            android:id="@+id/btn_routing_settings"
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:background="@drawable/bg_dashboard_card"
+                            android:layout_marginBottom="16dp"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="16dp">
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_routing_24dp"
+                                    app:tint="@color/colorWhite" />
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Routing Settings"
+                                        android:textColor="?android:attr/textColorPrimary"
+                                        android:textSize="16sp" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Custom rules and routing"
+                                        android:textColor="@color/dashboard_card_text"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Advanced &amp; Data"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <FrameLayout
+                            android:id="@+id/btn_user_asset"
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:background="@drawable/bg_dashboard_card"
+                            android:layout_marginBottom="8dp"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="16dp">
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_folder_24"
+                                    app:tint="@color/colorWhite" />
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="User Assets"
+                                        android:textColor="?android:attr/textColorPrimary"
+                                        android:textSize="16sp" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="geo files and configurations"
+                                        android:textColor="@color/dashboard_card_text"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:id="@+id/btn_logcat"
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:background="@drawable/bg_dashboard_card"
+                            android:layout_marginBottom="16dp"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="16dp">
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_logcat_24dp"
+                                    app:tint="@color/colorWhite" />
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Logcat"
+                                        android:textColor="?android:attr/textColorPrimary"
+                                        android:textSize="16sp" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="View debug logs"
+                                        android:textColor="@color/dashboard_card_text"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </FrameLayout>
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="General"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <FrameLayout
+                            android:id="@+id/btn_settings"
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:background="@drawable/bg_dashboard_card"
+                            android:layout_marginBottom="8dp"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="16dp">
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_settings_24dp"
+                                    app:tint="@color/colorWhite" />
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="General Settings"
+                                        android:textColor="?android:attr/textColorPrimary"
+                                        android:textSize="16sp" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="App-wide configuration"
+                                        android:textColor="@color/dashboard_card_text"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:id="@+id/btn_check_update"
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:background="@drawable/bg_dashboard_card"
+                            android:layout_marginBottom="8dp"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="16dp">
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_check_update_24dp"
+                                    app:tint="@color/colorWhite" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:text="Check Update"
+                                    android:textColor="?android:attr/textColorPrimary"
+                                    android:textSize="16sp" />
+                            </LinearLayout>
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:id="@+id/btn_backup_restore"
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:background="@drawable/bg_dashboard_card"
+                            android:layout_marginBottom="8dp"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="16dp">
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_backup_24dp"
+                                    app:tint="@color/colorWhite" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:text="Backup &amp; Restore"
+                                    android:textColor="?android:attr/textColorPrimary"
+                                    android:textSize="16sp" />
+                            </LinearLayout>
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:id="@+id/btn_about"
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:background="@drawable/bg_dashboard_card"
+                            android:layout_marginBottom="8dp"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="16dp">
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_about_24dp"
+                                    app:tint="@color/colorWhite" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:text="About"
+                                    android:textColor="?android:attr/textColorPrimary"
+                                    android:textSize="16sp" />
+                            </LinearLayout>
+                        </FrameLayout>
+        
+                    </LinearLayout>
+                </ScrollView>
+                
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:id="@+id/nav_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/bg_bottom_nav"
+                    app:elevation="0dp"
+                    app:itemIconSize="28dp"
+                    app:itemActiveIndicatorStyle="@null"
+                    app:itemIconTint="@null"
+                    app:itemTextColor="@color/bottom_nav_text_color"
+                    app:labelVisibilityMode="labeled"
+                    app:itemTextAppearanceActive="@style/BottomNavTextStyle"
+                    app:itemTextAppearanceInactive="@style/BottomNavTextStyle"
+                    app:menu="@menu/bottom_nav_menu" />
+                
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </RelativeLayout>
+</LinearLayout>

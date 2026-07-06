@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="import_manually_proxy_chain" type="id" />
+    <item name="service_restart" type="id" />
+    <item name="del_all_config" type="id" />
+    <item name="del_duplicate_config" type="id" />
+    <item name="del_invalid_config" type="id" />
+    <item name="sort_by_test_results" type="id" />
+    <item name="locate_selected_config" type="id" />
+    <item name="sub_setting" type="id" />
+    <item name="per_app_proxy_settings" type="id" />
+    <item name="routing_setting" type="id" />
+    <item name="user_asset_setting" type="id" />
+    <item name="settings" type="id" />
+    <item name="promotion" type="id" />
+    <item name="logcat" type="id" />
+    <item name="check_for_update" type="id" />
+    <item name="backup_restore" type="id" />
+    <item name="about" type="id" />
+    <item name="logcat_share" type="id" />
+    <item name="share_all" type="id" />
+    <item name="routing_settings_process" type="id" />
+    <item name="et_kcp_mtu" type="id" />
+    <item name="et_kcp_tti" type="id" />
+    <item name="layout_kcp" type="id" />
+    <item name="et_fm" type="id" />
+    <item name="et_verify_peer_cert_by_name" type="id" />
+    <item name="lay_verify_peer_cert_by_name" type="id" />
+    <item name="btn_pinned_ca256_action" type="id" />
+    <item name="layout_browser_dialer" type="id" />
+    <item name="sp_browser_dialer_mode" type="id" />
+</resources>

@@ -1,0 +1,131 @@
+name: Build APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        required: false
+        type: string
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+        fetch-depth: '0'
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+        cache: 'gradle'
+
+    - name: Setup Gradle Wrapper (v9.3.1)
+      run: gradle wrapper --gradle-version 9.3.1
+
+    - name: Ensure gradlew is executable
+      run: chmod +x gradlew
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3.2.0
+      with:
+        log-accepted-android-sdk-licenses: false
+        cmdline-tools-version: '13114758'
+        packages: 'platforms;android-36.1 build-tools;36.1.0 platform-tools'
+
+    - name: Install NDK
+      run: |
+        echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+          --channel=0 \
+          --install "ndk;28.2.13676358"
+        echo "NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> $GITHUB_ENV
+
+    - name: Restore cached libhevtun
+      id: cache-libhevtun-restore
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ github.workspace }}/libs
+        key: libhevtun-${{ runner.os }}-${{ env.NDK_HOME }}-${{ hashFiles('.git/modules/hevsocks5tunnel/HEAD', 'hevsocks5tunnel/HEAD') }}-${{ hashFiles('compile-hevtun.sh') }}
+
+    - name: Build libhevtun
+      if: steps.cache-libhevtun-restore.outputs.cache-hit != 'true'
+      run: |
+        bash compile-hevtun.sh
+        
+    - name: Save libhevtun
+      if: steps.cache-libhevtun-restore.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ github.workspace }}/libs
+        key: libhevtun-${{ runner.os }}-${{ env.NDK_HOME }}-${{ hashFiles('.git/modules/hevsocks5tunnel/HEAD', 'hevsocks5tunnel/HEAD') }}-${{ hashFiles('compile-hevtun.sh') }}
+
+      run: |
+
+    - name: Fetch AndroidLibXrayLite tag (Si Cepat via unarto API)
+      run: |
+        # Mengambil tag rilis terbaru dari repo unarto sendiri
+        CURRENT_TAG=$(curl -s https://api.github.com/repos/unarto/Androidlibxraylitev26.1.23/releases/latest | jq -r .tag_name)
+        echo "Current tag in unarto repo: $CURRENT_TAG"
+        echo "CURRENT_TAG=$CURRENT_TAG" >> $GITHUB_ENV
+
+    - name: Download libv2ray
+      uses: robinraju/release-downloader@v1.12
+      with:
+        repository: 'unarto/Androidlibxraylitev26.1.23'
+        tag: ${{ env.CURRENT_TAG }}
+        fileName: 'libv2ray.aar'
+        out-file-path: app/libs/
+
+    - name: Decode debug keystore
+      run: base64 -d debug.keystore.base64 > debug.keystore || echo "Debug keystore base64 not found or failed to decode, skipping."
+
+    - name: Build APK
+      run: |
+        echo "sdk.dir=${ANDROID_HOME}" > local.properties
+        chmod 755 gradlew
+        ./gradlew licenseFdroidReleaseReport || echo "Fdroid report failed or unneeded, skipping."
+        ./gradlew assembleRelease
+        
+    - name: Upload arm64-v8a APK
+      uses: actions/upload-artifact@v4
+      if: ${{  success() }}
+      with:
+        name: arm64-v8a
+        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*arm64-v8a*.apk
+
+    - name: Upload armeabi-v7a APK
+      uses: actions/upload-artifact@v4
+      if: ${{  success() }}
+      with:
+        name: armeabi-v7a
+        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*armeabi-v7a*.apk
+
+    - name: Upload x86 APK
+      uses: actions/upload-artifact@v4
+      if: ${{  success() }}
+      with:
+        name: x86-apk
+        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*x86*.apk
+
+    - name: Upload x86_64 APK
+      uses: actions/upload-artifact@v4
+      if: ${{  success() }}
+      with:
+        name: x86_64
+        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*x86_64*.apk
+
+    - name: Upload Universal APK
+      uses: actions/upload-artifact@v4
+      if: ${{  success() }}
+      with:
+        name: universal
+        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*universal*.apk
+

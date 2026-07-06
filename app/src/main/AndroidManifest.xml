@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
+    <application
+        android:name=".AngApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppThemeDayNight.NoActionBar">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/AppThemeDayNight.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".vpn.SicepatVpnService"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:foregroundServiceType="specialUse"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="VPN connection proxy server routing" />
+        </service>
+
+        <activity android:name=".ui.ThemeActivity" android:exported="false" />
+        <activity android:name=".ui.SettingsActivity" android:exported="false" />
+        <activity android:name=".ui.SubSettingActivity" android:exported="false" />
+        <activity android:name=".ui.SubEditActivity" android:exported="false" />
+        <activity android:name=".ui.PerAppProxyActivity" android:exported="false" />
+        <activity android:name=".ui.RoutingSettingActivity" android:exported="false" />
+        <activity android:name=".ui.RoutingEditActivity" android:exported="false" />
+        <activity android:name=".ui.UserAssetActivity" android:exported="false" />
+        <activity android:name=".ui.UserAssetUrlActivity" android:exported="false" />
+        <activity android:name=".ui.BackupActivity" android:exported="false" />
+        <activity android:name=".ui.LogcatActivity" android:exported="false" />
+        <activity android:name=".ui.CheckUpdateActivity" android:exported="false" />
+        <activity android:name=".ui.AboutActivity" android:exported="false" />
+        <activity android:name=".ui.ServerActivity" android:exported="false" />
+        <activity android:name=".ui.ServerCustomConfigActivity" android:exported="false" />
+        <activity android:name=".ui.ServerGroupActivity" android:exported="false" />
+        <activity android:name=".ui.ServerProxyChainActivity" android:exported="false" />
+        <activity android:name=".ui.ScannerActivity" android:exported="false" />
+        <activity android:name=".ui.ScScannerActivity" android:exported="false" />
+        <activity android:name=".ui.ScStartActivity" android:exported="true" />
+        <activity android:name=".ui.ScStopActivity" android:exported="true" />
+        <activity android:name=".ui.ScSwitchActivity" android:exported="true" />
+        <activity android:name=".ui.TaskerActivity" android:exported="true" />
+        <activity android:name=".ui.UrlSchemeActivity" android:exported="true" />
+        <activity android:name=".ui.AppPickerActivity" android:exported="false" />
+        <activity android:name=".ui.HotshareActivity" android:exported="false" />
+        <activity android:name=".ui.HotspotRootActivity" android:exported="false" />
+    </application>
+
+</manifest>

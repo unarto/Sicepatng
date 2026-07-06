@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/sub_update"
+        android:icon="@drawable/ic_restore_24dp"
+        android:title="Update All"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/sort_az"
+        android:icon="@drawable/ic_sort_24dp"
+        android:title="Sort A-Z"
+        app:showAsAction="ifRoom" />
+</menu>

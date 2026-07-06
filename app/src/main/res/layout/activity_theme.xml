@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- SECTION: Theme Mode -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_24dp"
+                app:tint="?attr/colorOnSurfaceVariant"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="Theme Mode Icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Theme mode"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface" />
+        </LinearLayout>
+
+        <!-- Segmented Card Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="28dp"
+            android:weightSum="3">
+
+            <!-- Card: Auto -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_mode_auto"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1.5dp"
+                app:strokeColor="?attr/colorOutlineVariant"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/img_mode_auto"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/ic_theme_auto"
+                        app:tint="?attr/colorOnSurfaceVariant"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/txt_mode_auto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Auto"
+                        android:textSize="14sp"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Card: Light -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_mode_light"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="3dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1.5dp"
+                app:strokeColor="?attr/colorOutlineVariant"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/img_mode_light"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/ic_theme_light"
+                        app:tint="?attr/colorOnSurfaceVariant"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/txt_mode_light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Light"
+                        android:textSize="14sp"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Card: Dark -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_mode_dark"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1.5dp"
+                app:strokeColor="?attr/colorOutlineVariant"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/img_mode_dark"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/ic_theme_dark"
+                        app:tint="?attr/colorOnSurfaceVariant"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/txt_mode_dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dark"
+                        android:textSize="14sp"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <!-- SECTION: Theme Color -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_image_24dp"
+                    app:tint="?attr/colorOnSurfaceVariant"
+                    android:layout_marginEnd="12dp"
+                    android:contentDescription="Theme Color Icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Theme color"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface" />
+            </LinearLayout>
+
+            <!-- Control Buttons (Scheme Pill and Reset) -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true">
+
+                <!-- Color Scheme Name Pill -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_scheme_pill"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Content"
+                    android:textSize="13sp"
+                    android:textColor="?attr/colorOnPrimaryContainer"
+                    app:backgroundTint="?attr/colorPrimaryContainer"
+                    app:cornerRadius="100dp"
+                    app:elevation="0dp"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:paddingHorizontal="16dp"
+                    android:layout_marginEnd="8dp" />
+
+                <!-- Reset Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_reset_theme"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:icon="@drawable/ic_theme_reset"
+                    app:iconTint="?attr/colorOnSurfaceVariant"
+                    app:iconSize="20dp"
+                    app:backgroundTint="?attr/colorSurfaceVariant"
+                    app:cornerRadius="20dp"
+                    app:elevation="0dp"
+                    style="@style/Widget.Material3.Button.Icon"
+                    android:insetLeft="0dp"
+                    android:insetTop="0dp"
+                    android:insetRight="0dp"
+                    android:insetBottom="0dp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!-- Color Swatches Grid -->
+        <GridLayout
+            android:id="@+id/swatches_grid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:columnCount="4"
+            android:rowCount="3"
+            android:layout_marginBottom="28dp">
+
+            <!-- Swatch 1: Coral / TonalSpot -->
+            <FrameLayout
+                android:id="@+id/swatch_1"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_circle_solid"
+                    app:tint="#FF8A80" />
+                <ImageView
+                    android:id="@+id/check_swatch_1"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_action_done"
+                    app:tint="#FFFFFF"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <!-- Swatch 2: Beige / Fidelity -->
+            <FrameLayout
+                android:id="@+id/swatch_2"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_circle_solid"
+                    app:tint="#D7CCC8" />
+                <ImageView
+                    android:id="@+id/check_swatch_2"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_action_done"
+                    app:tint="#FFFFFF"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <!-- Swatch 3: Blue / Content (Default) -->
+            <FrameLayout
+                android:id="@+id/swatch_3"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_circle_solid"
+                    app:tint="#2196F3" />
+                <ImageView
+                    android:id="@+id/check_swatch_3"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_action_done"
+                    app:tint="#FFFFFF"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <!-- Swatch 4: Olive-Green / FruitSalad -->
+            <FrameLayout
+                android:id="@+id/swatch_4"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_circle_solid"
+                    app:tint="#CDDC39" />
+                <ImageView
+                    android:id="@+id/check_swatch_4"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_action_done"
+                    app:tint="#FFFFFF"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <!-- Swatch 5: Mint-Teal / Neutral -->
+            <FrameLayout
+                android:id="@+id/swatch_5"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_circle_solid"
+                    app:tint="#B2DFDB" />
+                <ImageView
+                    android:id="@+id/check_swatch_5"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_action_done"
+                    app:tint="#FFFFFF"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <!-- Swatch 6: Green / Vibrant -->
+            <FrameLayout
+                android:id="@+id/swatch_6"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_circle_solid"
+                    app:tint="#4CAF50" />
+                <ImageView
+                    android:id="@+id/check_swatch_6"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_action_done"
+                    app:tint="#FFFFFF"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <!-- Swatch 7: Pink-Beige / Expressive -->
+            <FrameLayout
+                android:id="@+id/swatch_7"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_circle_solid"
+                    app:tint="#FFCCBC" />
+                <ImageView
+                    android:id="@+id/check_swatch_7"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_action_done"
+                    app:tint="#FFFFFF"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <!-- Swatch 8: Purple / Rainbow -->
+            <FrameLayout
+                android:id="@+id/swatch_8"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_circle_solid"
+                    app:tint="#9C27B0" />
+                <ImageView
+                    android:id="@+id/check_swatch_8"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_action_done"
+                    app:tint="#FFFFFF"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <!-- Plus Button: Select Custom Palette Color -->
+            <FrameLayout
+                android:id="@+id/swatch_custom"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:id="@+id/img_swatch_custom_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_circle_solid"
+                    app:tint="?attr/colorPrimary" />
+                <ImageView
+                    android:id="@+id/img_swatch_custom_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_add_24dp"
+                    app:tint="?attr/colorOnPrimary" />
+                <ImageView
+                    android:id="@+id/check_swatch_custom"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_action_done"
+                    app:tint="#FFFFFF"
+                    android:visibility="gone" />
+            </FrameLayout>
+        </GridLayout>
+
+        <!-- SECTION: Pure Black Mode -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="28dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_theme_black"
+                app:tint="?attr/colorOnSurfaceVariant"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="Pure Black Icon" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pure black mode"
+                    android:textSize="16sp"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pitch black background in dark mode"
+                    android:textSize="12sp"
+                    android:textColor="?attr/colorOnSurfaceVariant" />
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switch_pure_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- SECTION: Text Scaling -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_theme_text_scale"
+                    app:tint="?attr/colorOnSurfaceVariant"
+                    android:layout_marginEnd="12dp"
+                    android:contentDescription="Text Scale Icon" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Text Scaling"
+                        android:textSize="16sp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Scale system text display"
+                        android:textSize="12sp"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
+                </LinearLayout>
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switch_text_scaling"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <!-- Slider / Seekbar Container -->
+            <LinearLayout
+                android:id="@+id/layout_text_scaling_control"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginStart="36dp">
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/slider_text_scaling"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:valueFrom="80.0"
+                    android:valueTo="130.0"
+                    android:stepSize="1.0"
+                    android:value="100.0" />
+
+                <TextView
+                    android:id="@+id/txt_text_scaling_value"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="100%"
+                    android:textSize="14sp"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
