@@ -67,8 +67,6 @@ jobs:
         path: ${{ github.workspace }}/libs
         key: libhevtun-${{ runner.os }}-${{ env.NDK_HOME }}-${{ hashFiles('.git/modules/hevsocks5tunnel/HEAD', 'hevsocks5tunnel/HEAD') }}-${{ hashFiles('compile-hevtun.sh') }}
 
-      run: |
-
     - name: Fetch AndroidLibXrayLite tag (Si Cepat via unarto API)
       run: |
         # Mengambil tag rilis terbaru dari repo unarto sendiri
