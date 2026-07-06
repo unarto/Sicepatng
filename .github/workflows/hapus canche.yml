@@ -1,0 +1,32 @@
+name: Hapus Cache Libhevtun
+
+on:
+  workflow_dispatch: # Biar bisa lu klik manual pas lagi buntu
+
+permissions:
+  actions: write # Wajib ada biar bot punya akses hapus cache
+
+jobs:
+  clear-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Bersihin Sampah Cache
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "--- Lagi nyari dan ngehapus cache libhevtun... ---"
+          # Cari semua cache yang ada kata 'libhevtun'
+          # Terus hapus satu-satu biar fresh lagi
+          
+          # Ambil list cache, filter yang ada 'libhevtun', ambil ID-nya
+          cache_keys=$(gh cache list --limit 100 | grep "libhevtun" | awk '{print $1}')
+          
+          if [ -z "$cache_keys" ]; then
+            echo "Gak ada cache libhevtun, udah bersih kali!"
+          else
+            for key in $cache_keys; do
+              echo "Ngehapus cache dengan ID: $key"
+              gh cache delete "$key" || true
+            done
+            echo "--- Beres! Cache udah rata tanah ---"
+          fi
