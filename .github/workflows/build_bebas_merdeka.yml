@@ -39,6 +39,15 @@ jobs:
     - name: Setup Build Essentials
       run: sudo apt-get update && sudo apt-get install -y build-essential
 
+    # --- BAGIAN OTOMATISASI JAR ---
+    - name: Fix Gradle Wrapper (Otomatis tiap Build)
+      run: |
+        echo "--- Memastikan Gradle Wrapper selalu fresh ---"
+        rm -rf gradle/wrapper/gradle-wrapper.jar
+        # Generate ulang wrapper supaya gak korup
+        gradle wrapper --gradle-version 9.3.1
+    # ------------------------------
+
     - name: Restore cached libhevtun
       id: cache-libhevtun-restore
       uses: actions/cache/restore@v4
@@ -51,9 +60,8 @@ jobs:
       env:
         NDK_HOME: /usr/local/lib/android/sdk/ndk/28.2.13676358
       run: |
-        # Verifikasi folder submodule sebelum build
         if [ ! -d "hev-socks5-tunnel" ]; then
-          echo "Error: Folder hev-socks5-tunnel tidak ditemukan! Cek nama submodule lu."
+          echo "Error: Folder hev-socks5-tunnel tidak ditemukan!"
           exit 1
         fi
         chmod +x compile-hevtun.sh
@@ -71,8 +79,6 @@ jobs:
         mkdir -p app/libs
         if [ -d "libs" ]; then
           cp -r libs/* app/libs/
-        else
-          echo "Folder libs tidak ditemukan, skip copy."
         fi
 
     - name: Download libv2ray
