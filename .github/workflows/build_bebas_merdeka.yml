@@ -21,18 +21,18 @@ jobs:
         submodules: 'recursive'
         fetch-depth: '0'
 
+    # Tambahkan dependensi sistem yang sering dibutuhkan untuk NDK
+    - name: Install Build Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build build-essential
+
     - name: Setup Java
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: '21'
         cache: 'gradle'
-
-    - name: Setup Gradle Wrapper (v9.3.1)
-      run: gradle wrapper --gradle-version 9.3.1
-
-    - name: Ensure gradlew is executable
-      run: chmod +x gradlew
 
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3.2.0
@@ -43,9 +43,8 @@ jobs:
 
     - name: Install NDK
       run: |
-        echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
-          --channel=0 \
-          --install "ndk;28.2.13676358"
+        echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --channel=0 --install "ndk;28.2.13676358"
+        # Export NDK_HOME agar bisa diakses oleh shell manapun
         echo "NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> $GITHUB_ENV
 
     - name: Restore cached libhevtun
@@ -57,7 +56,10 @@ jobs:
 
     - name: Build libhevtun
       if: steps.cache-libhevtun-restore.outputs.cache-hit != 'true'
+      # Menambahkan debug mode (set -x) dan memastikan NDK_HOME terbaca
       run: |
+        set -x
+        export NDK_HOME=${{ env.NDK_HOME }}
         bash compile-hevtun.sh
     
     - name: Save libhevtun
@@ -69,13 +71,12 @@ jobs:
 
     - name: Copy libhevtun
       run: |
-        cp -r ${{ github.workspace }}/libs ${{ github.workspace }}/app
+        mkdir -p app/libs
+        cp -r ${{ github.workspace }}/libs/* ${{ github.workspace }}/app/libs/ || echo "No libs found to copy"
 
-    - name: Fetch AndroidLibXrayLite tag (Si Cepat via unarto API)
+    - name: Fetch AndroidLibXrayLite tag
       run: |
-        # Mengambil tag rilis terbaru dari repo unarto sendiri
         CURRENT_TAG=$(curl -s https://api.github.com/repos/unarto/Androidlibxraylitev26.1.23/releases/latest | jq -r .tag_name)
-        echo "Current tag in unarto repo: $CURRENT_TAG"
         echo "CURRENT_TAG=$CURRENT_TAG" >> $GITHUB_ENV
 
     - name: Download libv2ray
@@ -87,47 +88,17 @@ jobs:
         out-file-path: app/libs/
 
     - name: Decode debug keystore
-      run: base64 -d debug.keystore.base64 > debug.keystore || echo "Debug keystore base64 not found or failed to decode, skipping."
+      run: base64 -d debug.keystore.base64 > debug.keystore || echo "Skipping keystore."
 
     - name: Build APK
       run: |
         echo "sdk.dir=${ANDROID_HOME}" > local.properties
-        chmod 755 gradlew
-        ./gradlew licenseFdroidReleaseReport || echo "Fdroid report failed or unneeded, skipping."
+        chmod +x gradlew
         ./gradlew assembleRelease
-    
-    - name: Upload arm64-v8a APK
-      uses: actions/upload-artifact@v4
-      if: ${{  success() }}
-      with:
-        name: arm64-v8a
-        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*arm64-v8a*.apk
 
-    - name: Upload armeabi-v7a APK
+    - name: Upload Artifacts
       uses: actions/upload-artifact@v4
-      if: ${{  success() }}
+      if: success()
       with:
-        name: armeabi-v7a
-        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*armeabi-v7a*.apk
-
-    - name: Upload x86 APK
-      uses: actions/upload-artifact@v4
-      if: ${{  success() }}
-      with:
-        name: x86-apk
-        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*x86*.apk
-
-    - name: Upload x86_64 APK
-      uses: actions/upload-artifact@v4
-      if: ${{  success() }}
-      with:
-        name: x86_64
-        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*x86_64*.apk
-
-    - name: Upload Universal APK
-      uses: actions/upload-artifact@v4
-      if: ${{  success() }}
-      with:
-        name: universal
-        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*universal*.apk
-
+        name: release-apks
+        path: app/build/outputs/apk/*/release/*.apk
