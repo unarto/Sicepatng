@@ -23,10 +23,10 @@ jobs:
 
       - name: Eksekusi Pasang Submodule Hev
         run: |
-          # 1. Bersihkan sisa-sisa nama folder yang lama (hev-socks5-tunnel)
-          git rm -rf hev-socks5-tunnel || true
-          rm -rf .git/modules/hev-socks5-tunnel || true
-          git config -f .gitmodules --remove-section submodul.hev-socks5-tunnel || true
+          # 1. Bersihkan sisa-sisa nama folder yang lama (hevsocks5tunnel)
+          git rm -rf hevsocks5tunnel || true
+          rm -rf .git/modules/hevsocks5tunnel || true
+          git config -f .gitmodules --remove-section submodule.hevsocks5tunnel || true
           
           # 2. Tambahkan submodule dengan nama folder yang benar: 'hev-socks5-tunnel'
           # Ini adalah kunci agar skrip compile-hevtun.sh bisa mendeteksi filenya
