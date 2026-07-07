@@ -1,5 +1,4 @@
 package com.sicepat.xrayapp.core
-
 import android.content.Context
 import com.sicepat.xrayapp.AppConfig
 import com.sicepat.xrayapp.util.LogUtil
@@ -10,21 +9,11 @@ import libv2ray.CoreController
 import libv2ray.Libv2ray
 import java.util.concurrent.atomic.AtomicBoolean
 
-/**
- * V2Ray Native Library Manager
- *
- * Thread-safe singleton wrapper for Libv2ray native methods.
- * Provides initialization protection and unified API for V2Ray core operations.
- */
+/** * V2Ray Native Library Manager * * Thread-safe singleton wrapper for Libv2ray native methods. * Provides initialization protection and unified API for V2Ray core operations. */
 object CoreNativeManager {
     private val initialized = AtomicBoolean(false)
-
-    /**
-     * Initialize V2Ray core environment.
-     * This method is thread-safe and ensures initialization happens only once.
-     * Subsequent calls will be ignored silently.
-     *
-     */
+    
+    /**     * Initialize V2Ray core environment.     * This method is thread-safe and ensures initialization happens only once.     * Subsequent calls will be ignored silently.     *     */
     suspend fun initCoreEnv(context: Context?) = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
         if (initialized.compareAndSet(false, true)) {
             try {
@@ -42,7 +31,7 @@ object CoreNativeManager {
             LogUtil.d(AppConfig.TAG, "V2Ray core environment already initialized, skipping")
         }
     }
-
+    
     fun reconcileBrowserDialer(dialerAddr: String) {
         try {
             val clazz = Class.forName("libv2ray.Libv2ray")
@@ -55,13 +44,8 @@ object CoreNativeManager {
             LogUtil.e(AppConfig.TAG, "Failed to reconcile browser dialer with address: $dialerAddr", e)
         }
     }
-
-
-    /**
-     * Get V2Ray core version.
-     *
-     * @return Version string of the V2Ray core
-     */
+    
+    /**     * Get V2Ray core version.     *     * @return Version string of the V2Ray core     */
     fun getLibVersion(): String {
         return try {
             Libv2ray.checkVersionX()
@@ -70,14 +54,8 @@ object CoreNativeManager {
             "Unknown"
         }
     }
-
-    /**
-     * Measure outbound connection delay.
-     *
-     * @param config The configuration JSON string
-     * @param testUrl The URL to test against
-     * @return Delay in milliseconds, or -1 if test failed
-     */
+    
+    /**     * Measure outbound connection delay.     *     * @param config The configuration JSON string     * @param testUrl The URL to test against     * @return Delay in milliseconds, or -1 if test failed     */
     suspend fun measureOutboundDelay(config: String, testUrl: String): Long = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
         return@withContext try {
             Libv2ray.measureOutboundDelay(config, testUrl)
@@ -86,13 +64,8 @@ object CoreNativeManager {
             -1L
         }
     }
-
-    /**
-     * Create a new core controller instance.
-     *
-     * @param handler The callback handler for core events
-     * @return A new CoreController instance
-     */
+    
+    /**     * Create a new core controller instance.     *     * @param handler The callback handler for core events     * @return A new CoreController instance     */
     fun newCoreController(handler: CoreCallbackHandler): CoreController {
         return try {
             Libv2ray.newCoreController(handler)

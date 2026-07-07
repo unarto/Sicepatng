@@ -150,7 +150,7 @@ object NotificationHelper {
 
         val displayTitle = title.ifEmpty { context.getString(R.string.app_name) }
         return NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(R.drawable.ic_stat_name)
+            .setSmallIcon(R.mipmap.ic_launcher_round)
             .setContentTitle(displayTitle)
             .setContentText(content)
             .setOngoing(false)
