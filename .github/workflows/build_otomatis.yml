@@ -6,10 +6,6 @@ on:
       release_tag:
         required: false
         type: string
-  push:
-    branches:
-      - main
-
 jobs:
   build:
     runs-on: ubuntu-latest
