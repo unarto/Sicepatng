@@ -2,6 +2,7 @@ import com.android.build.api.variant.FilterConfiguration
 
 plugins {
     alias(libs.plugins.android.application)
+    // id("com.jaredsburrows.license") version "0.9.8"
 }
 
 android {
@@ -56,13 +57,11 @@ android {
         }
     }
 
-    // --- UDAH DIBENERIN DI SINI ---
     sourceSets {
         getByName("main") {
-            jniLibs.srcDirs("libs") 
+            jniLibs.srcDirs(file("libs"))
         }
     }
-    // ------------------------------
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
