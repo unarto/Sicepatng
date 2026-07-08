@@ -1,0 +1,30 @@
+name: Upload APK Mandiri
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upload-only:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Cari dan Copy APK
+        run: |
+          mkdir -p target-upload
+          FILE=$(find . -name "*arm64-v8a*.apk" | head -n 1)
+          
+          if [ -n "$FILE" ]; then
+            cp "$FILE" target-upload/sicepat-arm64.apk
+            echo "File ketemu: $FILE"
+          else
+            echo "File nggak ketemu di mana-mana, Cok!"
+            exit 1
+          fi
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sicepat-arm64-v8a
+          path: target-upload/sicepat-arm64.apk
