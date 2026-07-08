@@ -705,6 +705,7 @@ class MainActivity : HelperBaseActivity(), NavigationBarView.OnItemSelectedListe
 
     override fun onResume() {
         super.onResume()
+        applyThemeSettings()
     }
 
     override fun onPause() {

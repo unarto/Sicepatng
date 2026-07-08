@@ -631,7 +631,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:src="@drawable/ic_share_24dp"
-                                    app:tint="@color/colorWhite" />
+                                    app:tint="?android:attr/textColorPrimary" />
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -659,7 +659,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:src="@drawable/ic_settings_24dp"
-                                    app:tint="@color/colorWhite" />
+                                    app:tint="?android:attr/textColorPrimary" />
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -696,7 +696,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:src="@drawable/ic_per_apps_24dp"
-                                    app:tint="@color/colorWhite" />
+                                    app:tint="?android:attr/textColorPrimary" />
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -736,7 +736,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:src="@drawable/ic_routing_24dp"
-                                    app:tint="@color/colorWhite" />
+                                    app:tint="?android:attr/textColorPrimary" />
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -784,7 +784,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:src="@drawable/ic_folder_24"
-                                    app:tint="@color/colorWhite" />
+                                    app:tint="?android:attr/textColorPrimary" />
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -824,7 +824,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:src="@drawable/ic_logcat_24dp"
-                                    app:tint="@color/colorWhite" />
+                                    app:tint="?android:attr/textColorPrimary" />
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -872,7 +872,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:src="@drawable/ic_settings_24dp"
-                                    app:tint="@color/colorWhite" />
+                                    app:tint="?android:attr/textColorPrimary" />
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -912,7 +912,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:src="@drawable/ic_check_update_24dp"
-                                    app:tint="@color/colorWhite" />
+                                    app:tint="?android:attr/textColorPrimary" />
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -941,7 +941,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:src="@drawable/ic_backup_24dp"
-                                    app:tint="@color/colorWhite" />
+                                    app:tint="?android:attr/textColorPrimary" />
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -970,7 +970,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:src="@drawable/ic_about_24dp"
-                                    app:tint="@color/colorWhite" />
+                                    app:tint="?android:attr/textColorPrimary" />
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"

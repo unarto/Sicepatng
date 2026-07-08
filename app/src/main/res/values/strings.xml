@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Sicepat</string>
+    <string name="app_name" translatable="false">SiCepat</string>
     <string name="app_widget_name">Switch</string>
     <string name="app_tile_name">Switch</string>
     <string name="app_tile_first_use">First use of this feature, please use the app to add server</string>
@@ -459,4 +459,8 @@
     <string name="title_theme_color">Theme color</string>
     <string name="title_pure_black">Pure black mode</string>
     <string name="title_text_scaling">Text Scaling</string>
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_proxies">Proxies</string>
+    <string name="nav_profiles">Profiles</string>
+    <string name="nav_tools">Tools</string>
 </resources>

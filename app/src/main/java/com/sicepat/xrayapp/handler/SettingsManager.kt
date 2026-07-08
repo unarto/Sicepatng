@@ -429,7 +429,7 @@ object SettingsManager {
             Language.AUTO -> Utils.getSysLocale()
             Language.ENGLISH -> Locale.ENGLISH
             Language.INDONESIA -> Locale.forLanguageTag("id")
-            Language.ALIEN -> Locale.forLanguageTag("al")
+            Language.ALIEN -> Locale.forLanguageTag("xx")
         }
     }
 

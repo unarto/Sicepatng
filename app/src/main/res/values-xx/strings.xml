@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SiCepat Alien</string>
+    <string name="title_language">Bahasa (preketek)</string>
+    <string name="title_pref_ui_mode_night">Prekotok Mode</string>
+    <string name="menu_item_search">Cari (prokotok)</string>
+
+    <!-- Bottom Navigation translated to Alien Language -->
+    <string name="nav_dashboard">Preketek Dashboard</string>
+    <string name="nav_proxies">Prokotok Proxies</string>
+    <string name="nav_profiles">Prek Profiles</string>
+    <string name="nav_tools">Kotek Tools</string>
+
+    <!-- Prominent Dashboard & Service Strings -->
+    <string name="toast_services_start">Prokotok Prek Start!</string>
+    <string name="toast_services_stop">Prokotok Prek Stop!</string>
+    <string name="toast_services_success">Preketek Start Success Ketek!</string>
+    <string name="toast_services_failure">Preketek Start Failure Kotok!</string>
+    <string name="toast_success">Success Preketek!</string>
+    <string name="toast_failure">Failure Prokotok!</string>
+    <string name="title_settings">Kotek Settings Ketek</string>
+    <string name="title_server">Kotok Config</string>
+    <string name="title_about">Preketek About</string>
+    <string name="title_logcat">Logcat Prokotok</string>
+</resources>

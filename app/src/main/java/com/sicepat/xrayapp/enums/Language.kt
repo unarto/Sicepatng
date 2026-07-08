@@ -4,7 +4,7 @@ enum class Language(val code: String) {
     AUTO("auto"),
     ENGLISH("en"),
     INDONESIA("id"),
-    ALIEN("al");
+    ALIEN("xx");
 
     companion object {
         fun fromCode(code: String): Language {
