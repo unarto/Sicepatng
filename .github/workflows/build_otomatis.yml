@@ -1,15 +1,11 @@
-name: Build APK
+name: Build otomatis 
 
 on:
   workflow_dispatch:
-    inputs:
-      release_tag:
-        required: false
-        type: string
+
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -24,12 +20,6 @@ jobs:
         java-version: '21'
         cache: 'gradle'
 
-    - name: Setup Gradle Wrapper (v9.3.1)
-      run: gradle wrapper --gradle-version 9.3.1
-
-    - name: Ensure gradlew is executable
-      run: chmod +x gradlew
-
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3.2.0
       with:
@@ -39,89 +29,48 @@ jobs:
 
     - name: Install NDK
       run: |
-        echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
-          --channel=0 \
-          --install "ndk;28.2.13676358"
+        echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --channel=0 --install "ndk;28.2.13676358"
         echo "NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> $GITHUB_ENV
 
-    - name: Restore cached libhevtun
-      id: cache-libhevtun-restore
-      uses: actions/cache/restore@v4
-      with:
-        path: ${{ github.workspace }}/libs
-        key: libhevtun-${{ runner.os }}-${{ env.NDK_HOME }}-${{ hashFiles('.git/modules/hevsocks5tunnel/HEAD', 'hevsocks5tunnel/HEAD') }}-${{ hashFiles('compile-hevtun.sh') }}
+    - name: Fix Gradle Wrapper
+      run: |
+        rm -rf gradle/wrapper/gradle-wrapper.jar
+        gradle wrapper --gradle-version 9.3.1
 
     - name: Build libhevtun
-      if: steps.cache-libhevtun-restore.outputs.cache-hit != 'true'
-      run: |
-        bash compile-hevtun.sh
-        
-    - name: Save libhevtun
-      if: steps.cache-libhevtun-restore.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v4
+      id: cache-libhevtun
+      uses: actions/cache@v4
       with:
         path: ${{ github.workspace }}/libs
-        key: libhevtun-${{ runner.os }}-${{ env.NDK_HOME }}-${{ hashFiles('.git/modules/hevsocks5tunnel/HEAD', 'hevsocks5tunnel/HEAD') }}-${{ hashFiles('compile-hevtun.sh') }}
+        key: libhevtun-${{ runner.os }}-${{ hashFiles('.git/modules/hev-socks5-tunnel/HEAD') }}
 
+    - name: Run compile script
+      if: steps.cache-libhevtun.outputs.cache-hit != 'true'
+      env:
+        NDK_HOME: /usr/local/lib/android/sdk/ndk/28.2.13676358
       run: |
+        chmod +x compile-hevtun.sh
+        bash compile-hevtun.sh
 
-    - name: Fetch AndroidLibXrayLite tag (Si Cepat via unarto API)
+    - name: Sync Libs
       run: |
-        # Mengambil tag rilis terbaru dari repo unarto sendiri
-        CURRENT_TAG=$(curl -s https://api.github.com/repos/unarto/Androidlibxraylitev26.1.23/releases/latest | jq -r .tag_name)
-        echo "Current tag in unarto repo: $CURRENT_TAG"
-        echo "CURRENT_TAG=$CURRENT_TAG" >> $GITHUB_ENV
+        mkdir -p app/libs
+        cp -r libs/* app/libs/
 
     - name: Download libv2ray
-      uses: robinraju/release-downloader@v1.12
-      with:
-        repository: 'unarto/Androidlibxraylitev26.1.23'
-        tag: ${{ env.CURRENT_TAG }}
-        fileName: 'libv2ray.aar'
-        out-file-path: app/libs/
+      run: |
+        CURRENT_TAG=$(curl -s https://api.github.com/repos/unarto/Androidlibxraylitev26.1.23/releases/latest | jq -r .tag_name)
+        curl -L "https://github.com/unarto/Androidlibxraylitev26.1.23/releases/download/$CURRENT_TAG/libv2ray.aar" -o app/libs/libv2ray.aar
 
-    - name: Decode debug keystore
-      run: base64 -d debug.keystore.base64 > debug.keystore || echo "Debug keystore base64 not found or failed to decode, skipping."
-
-    - name: Build APK
+    - name: Build APK (Arm64 Only)
       run: |
         echo "sdk.dir=${ANDROID_HOME}" > local.properties
-        chmod 755 gradlew
-        ./gradlew licenseFdroidReleaseReport || echo "Fdroid report failed or unneeded, skipping."
-        ./gradlew assembleRelease
-        
-    - name: Upload arm64-v8a APK
-      uses: actions/upload-artifact@v4
-      if: ${{  success() }}
-      with:
-        name: arm64-v8a
-        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*arm64-v8a*.apk
+        chmod +x gradlew
+        # Kita panggil build cuma buat arm64
+        ./gradlew assembleRelease -PabiFilters=arm64-v8a
 
-    - name: Upload armeabi-v7a APK
+    - name: Upload APK Arm64
       uses: actions/upload-artifact@v4
-      if: ${{  success() }}
       with:
-        name: armeabi-v7a
-        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*armeabi-v7a*.apk
-
-    - name: Upload x86 APK
-      uses: actions/upload-artifact@v4
-      if: ${{  success() }}
-      with:
-        name: x86-apk
-        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*x86*.apk
-
-    - name: Upload x86_64 APK
-      uses: actions/upload-artifact@v4
-      if: ${{  success() }}
-      with:
-        name: x86_64
-        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*x86_64*.apk
-
-    - name: Upload Universal APK
-      uses: actions/upload-artifact@v4
-      if: ${{  success() }}
-      with:
-        name: universal
-        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*universal*.apk
-
+        name: sicepat-arm64-v8a
+        path: app/build/outputs/apk/release/*.apk
