@@ -1,34 +1,32 @@
-name: Copy dan Upload APK Lama
+name: Copy dan Upload dari Repo
 
 on:
   workflow_dispatch:
-    inputs:
-      run_id:
-        description: 'Masukkan ID dari Build yang sukses'
-        required: true
 
 jobs:
-  copy-artifact:
+  upload-repo-file:
     runs-on: ubuntu-latest
     steps:
-      - name: Download APK dari Build Lama
-        uses: dawiddr/action-download-artifact@v2
-        with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: build.yml # Nama file workflow build lu
-          run_id: ${{ github.event.inputs.run_id }}
-          name: sicepat-arm64-v8a # Nama artifact yang pernah lu buat dulu
-          path: folder-apk-lama
+      - name: Ambil Repo
+        uses: actions/checkout@v4
 
-      - name: Copy dan Upload Ulang
+      - name: Copy dari Folder Repo ke Folder Upload
         run: |
-          mkdir -p final-upload
-          # Sekarang baru bisa pake cp karena filenya udah ada hasil download
-          cp folder-apk-lama/*.apk final-upload/sicepat-arm64.apk
-          ls -lh final-upload/
+          mkdir -p hasil-upload
+          # Ini bakal cari file di folder repo lu sendiri
+          # Pastiin path ini sesuai sama posisi file lu di repo
+          FILE=$(find . -name "*arm64-v8a*.apk" | head -n 1)
+          
+          if [ -n "$FILE" ]; then
+            cp "$FILE" hasil-upload/sicepat-arm64.apk
+            echo "File ditemukan di dalam repo: $FILE"
+          else
+            echo "File gak ada di repo, Cok. Coba cek lagi filenya udah lu push belum!"
+            exit 1
+          fi
 
-      - name: Upload
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: sicepat-arm64-v8a-copy
-          path: final-upload/sicepat-arm64.apk
+          name: sicepat-arm64-v8a
+          path: hasil-upload/sicepat-arm64.apk
