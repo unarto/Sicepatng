@@ -1,4 +1,4 @@
-name: Build otomatis 
+name: Build Bebas Merdeka
 
 on:
   workflow_dispatch:
@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -32,45 +33,94 @@ jobs:
         echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --channel=0 --install "ndk;28.2.13676358"
         echo "NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> $GITHUB_ENV
 
-    - name: Fix Gradle Wrapper
-      run: |
-        rm -rf gradle/wrapper/gradle-wrapper.jar
-        gradle wrapper --gradle-version 9.3.1
+    - name: Setup Build Essentials
+      run: sudo apt-get update && sudo apt-get install -y build-essential
 
-    - name: Build libhevtun
-      id: cache-libhevtun
-      uses: actions/cache@v4
+    # --- BAGIAN OTOMATISASI JAR ---
+    - name: Fix Gradle Wrapper (Otomatis tiap Build)
+      run: |
+        echo "--- Memastikan Gradle Wrapper selalu fresh ---"
+        rm -rf gradle/wrapper/gradle-wrapper.jar
+        # Generate ulang wrapper supaya gak korup
+        gradle wrapper --gradle-version 9.3.1
+    # ------------------------------
+
+    - name: Restore cached libhevtun
+      id: cache-libhevtun-restore
+      uses: actions/cache/restore@v4
       with:
         path: ${{ github.workspace }}/libs
-        key: libhevtun-${{ runner.os }}-${{ hashFiles('.git/modules/hev-socks5-tunnel/HEAD') }}
+        key: libhevtun-${{ runner.os }}-${{ env.NDK_HOME }}-${{ hashFiles('.git/modules/hev-socks5-tunnel/HEAD') }}-${{ hashFiles('compile-hevtun.sh') }}
 
-    - name: Run compile script
-      if: steps.cache-libhevtun.outputs.cache-hit != 'true'
+    - name: Build libhevtun
+      if: steps.cache-libhevtun-restore.outputs.cache-hit != 'true'
       env:
         NDK_HOME: /usr/local/lib/android/sdk/ndk/28.2.13676358
       run: |
+        if [ ! -d "hev-socks5-tunnel" ]; then
+          echo "Error: Folder hev-socks5-tunnel tidak ditemukan!"
+          exit 1
+        fi
         chmod +x compile-hevtun.sh
         bash compile-hevtun.sh
+
+    - name: Save libhevtun
+      if: steps.cache-libhevtun-restore.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ github.workspace }}/libs
+        key: libhevtun-${{ runner.os }}-${{ env.NDK_HOME }}-${{ hashFiles('.git/modules/hev-socks5-tunnel/HEAD') }}-${{ hashFiles('compile-hevtun.sh') }}
 
     - name: Sync Libs
       run: |
         mkdir -p app/libs
-        cp -r libs/* app/libs/
+        if [ -d "libs" ]; then
+          cp -r libs/* app/libs/
+        fi
 
     - name: Download libv2ray
       run: |
         CURRENT_TAG=$(curl -s https://api.github.com/repos/unarto/Androidlibxraylitev26.1.23/releases/latest | jq -r .tag_name)
         curl -L "https://github.com/unarto/Androidlibxraylitev26.1.23/releases/download/$CURRENT_TAG/libv2ray.aar" -o app/libs/libv2ray.aar
 
-    - name: Build APK (Arm64 Only)
+    - name: Decode debug keystore
+      run: |
+        if [ -f debug.keystore.base64 ]; then
+          base64 -d debug.keystore.base64 > debug.keystore
+        fi
+
+    - name: Build APK
       run: |
         echo "sdk.dir=${ANDROID_HOME}" > local.properties
         chmod +x gradlew
-        # Kita panggil build cuma buat arm64
-        ./gradlew assembleRelease -PabiFilters=arm64-v8a
+        ./gradlew assembleRelease
 
-    - name: Upload APK Arm64
-      uses: actions/upload-artifact@v4
+    - name: Upload arm64-v8a APK
+      uses: actions/upload-artifact@v6
+      if: ${{  success() }}
       with:
-        name: sicepat-arm64-v8a
-        path: app/build/outputs/apk/release/*.apk
+        name: arm64-v8a
+        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*arm64-v8a*.apk
+
+    - name: Upload armeabi-v7a APK
+      uses: actions/upload-artifact@v6
+      if: ${{  success() }}
+      with:
+        name: armeabi-v7a
+        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*armeabi-v7a*.apk
+
+    - name: Upload x86 APK
+      uses: actions/upload-artifact@v6
+      if: ${{  success() }}
+      with:
+        name: x86-apk
+        path: ${{ github.workspace }}/app/build/outputs/apk/*/release/*x86*.apk
+
+    - name: Upload to release
+      uses: svenstaro/upload-release-action@v2
+      if: github.event.inputs.release_tag != ''
+      with:
+        file: ${{ github.workspace }}/app/build/outputs/apk/*/release/*.apk
+        tag: ${{ github.event.inputs.release_tag }}
+        file_glob: true
+        prerelease: true
