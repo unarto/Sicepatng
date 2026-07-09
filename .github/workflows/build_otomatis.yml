@@ -1,4 +1,4 @@
-name: Build Bebas Merdeka
+name: Build otomatis 
 
 on:
   workflow_dispatch:
