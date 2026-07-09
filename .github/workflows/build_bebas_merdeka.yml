@@ -2,6 +2,12 @@ name: Build Bebas Merdeka
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -32,6 +38,18 @@ jobs:
       run: |
         echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --channel=0 --install "ndk;28.2.13676358"
         echo "NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> $GITHUB_ENV
+        echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> $GITHUB_ENV
+
+    # --- SETUP GO UNTUK BUILD AAR ---
+    - name: Setup Golang
+      uses: actions/setup-go@v6.1.0
+      with:
+        go-version-file: 'Androidlibxraylitev26.1.23/go.mod'
+
+    - name: Install & Setup Gomobile
+      run: |
+        go install golang.org/x/mobile/cmd/gomobile@latest
+        echo "$HOME/go/bin" >> $GITHUB_PATH
 
     - name: Setup Build Essentials
       run: sudo apt-get update && sudo apt-get install -y build-essential
@@ -41,10 +59,45 @@ jobs:
       run: |
         echo "--- Memastikan Gradle Wrapper selalu fresh ---"
         rm -rf gradle/wrapper/gradle-wrapper.jar
-        # Generate ulang wrapper supaya gak korup
         gradle wrapper --gradle-version 9.3.1
     # ------------------------------
 
+    # --- BAGIAN 1: CACHE & COMPILE LIBV2RAY (AAR) ---
+    - name: Restore cached libv2ray
+      id: cache-libv2ray-restore
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ github.workspace }}/v2ray_aar_bin
+        key: libv2ray-${{ runner.os }}-${{ hashFiles('Androidlibxraylitev26.1.23/go.mod') }}-${{ hashFiles('Androidlibxraylitev26.1.23/gen_assets.sh') }}
+
+    - name: Build libv2ray.aar (Local Repo)
+      if: steps.cache-libv2ray-restore.outputs.cache-hit != 'true'
+      run: |
+        gomobile init
+        cd Androidlibxraylitev26.1.23
+        mkdir -p assets data
+        bash gen_assets.sh download
+        cp -v data/*.dat assets/
+        go mod tidy
+        mkdir -p ../v2ray_aar_bin
+        gomobile bind -v -androidapi 24 -trimpath -ldflags='-s -w -buildid=' -o ../v2ray_aar_bin/libv2ray.aar ./
+
+    - name: Save libv2ray
+      if: steps.cache-libv2ray-restore.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ github.workspace }}/v2ray_aar_bin
+        key: libv2ray-${{ runner.os }}-${{ hashFiles('Androidlibxraylitev26.1.23/go.mod') }}-${{ hashFiles('Androidlibxraylitev26.1.23/gen_assets.sh') }}
+
+    - name: Copy libv2ray to App Folder
+      run: |
+        # Mencari folder modul utama secara otomatis dan membuat folder libs di dalamnya
+        TARGET_DIR=$(find . -maxdepth 2 -name "build.gradle*" -not -path "./build.gradle*" | head -n 1 | xargs dirname)
+        mkdir -p "$TARGET_DIR/libs/"
+        cp ${{ github.workspace }}/v2ray_aar_bin/libv2ray.aar "$TARGET_DIR/libs/"
+        echo "Libv2ray disalin ke: $TARGET_DIR/libs/"
+
+    # --- BAGIAN 2: CACHE & COMPILE LIBHEVTUN ---
     - name: Restore cached libhevtun
       id: cache-libhevtun-restore
       uses: actions/cache/restore@v4
@@ -71,17 +124,13 @@ jobs:
         path: ${{ github.workspace }}/libs
         key: libhevtun-${{ runner.os }}-${{ env.NDK_HOME }}-${{ hashFiles('.git/modules/hev-socks5-tunnel/HEAD') }}-${{ hashFiles('compile-hevtun.sh') }}
 
-    - name: Sync Libs
+    - name: Sync Libs to App Folder
       run: |
-        mkdir -p app/libs
+        TARGET_DIR=$(find . -maxdepth 2 -name "build.gradle*" -not -path "./build.gradle*" | head -n 1 | xargs dirname)
+        mkdir -p "$TARGET_DIR/libs"
         if [ -d "libs" ]; then
-          cp -r libs/* app/libs/
+          cp -r libs/* "$TARGET_DIR/libs/"
         fi
-
-    - name: Download libv2ray
-      run: |
-        CURRENT_TAG=$(curl -s https://api.github.com/repos/unarto/Androidlibxraylitev26.1.23/releases/latest | jq -r .tag_name)
-        curl -L "https://github.com/unarto/Androidlibxraylitev26.1.23/releases/download/$CURRENT_TAG/libv2ray.aar" -o app/libs/libv2ray.aar
 
     - name: Decode debug keystore
       run: |
@@ -89,15 +138,58 @@ jobs:
           base64 -d debug.keystore.base64 > debug.keystore
         fi
 
+    # --- BAGIAN 3: BUILD APK (BYPASS LINT & AUTO SPLIT) ---
     - name: Build APK
       run: |
         echo "sdk.dir=${ANDROID_HOME}" > local.properties
         chmod +x gradlew
-        ./gradlew assembleRelease
+        ./gradlew assembleRelease -x lint
 
-    - name: Upload APKs
+    # --- BAGIAN 4: UPLOAD ARTIFACTS DENGAN WILDCARD UNIVERSAL ---
+    - name: Upload arm64-v8a APK
       uses: actions/upload-artifact@v4
       if: success()
       with:
-        name: release-apks
-        path: app/build/outputs/apk/*/release/*.apk
+        name: arm64-v8a
+        path: "**/build/outputs/apk/*/release/*arm64-v8a*.apk"
+
+    - name: Upload armeabi-v7a APK
+      uses: actions/upload-artifact@v4
+      if: success()
+      with:
+        name: armeabi-v7a
+        path: "**/build/outputs/apk/*/release/*armeabi-v7a*.apk"
+
+    - name: Upload x86 APK
+      uses: actions/upload-artifact@v4
+      if: success()
+      with:
+        name: x86-apk
+        path: "**/build/outputs/apk/*/release/*x86*.apk"
+
+    - name: Upload x86_64 APK
+      uses: actions/upload-artifact@v4
+      if: success()
+      with:
+        name: x86_64-apk
+        path: "**/build/outputs/apk/*/release/*x86_64*.apk"
+
+    # --- BAGIAN 5: AUTO RELEASE KE HALAMAN GITHUB RELEASES ---
+    - name: Generate Release Tag
+      run: |
+        echo "FINAL_TAG=v3.0.${{ github.run_number }}" >> $GITHUB_ENV
+
+    - name: Create GitHub Release & Upload All Split APKs
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ env.FINAL_TAG }}
+        name: "Sicepat Bebas Merdeka Build #${{ github.run_number }}"
+        body: |
+          Rilis otomatis biner APK hasil compile via workflow Build Bebas Merdeka (Repo Sicepat).
+          
+          **Isi Rilis APK Berdasarkan Arsitektur:**
+          - `arm64-v8a` (HP Modern 64-bit)
+          - `armeabi-v7a` (HP Lama 32-bit)
+          - `x86` / `x86_64` (Untuk Emulator / Device Intel)
+        files: |
+          **/build/outputs/apk/*/release/*.apk
